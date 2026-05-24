@@ -1,4 +1,3 @@
-# Embeddings/vector_db.py
 import fitz  # PyMuPDF
 import os
 from langchain_core.documents import Document
@@ -6,7 +5,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
 from Embeddings.embedding_engine import get_embedding_model
 
-DB_DIR =DB_DIR = os.path.join(os.path.dirname(__file__), "chroma_db")
+# FIXED: Removed the double DB_DIR assignment typo
+DB_DIR = os.path.join(os.path.dirname(__file__), "chroma_db")
 COLLECTION_NAME = "web_uploaded_docs"
 
 def process_pdf_bytes(pdf_bytes, file_name):
@@ -37,11 +37,10 @@ def chunk_and_store(pdf_bytes, file_name):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     split_chunks = text_splitter.split_documents(raw_docs)
     
-    # 3. Get our embedding model from File 1
-    embeddings = get_embedding_model(provider="local")
+    # 3. Get our embedding model 
+    embeddings = get_embedding_model(provider="huggingface_api")
     
     # 4. Save to ChromaDB 
-    # FIXED: Changed embedding_function to embedding to prevent TypeError
     db = Chroma.from_documents(
         documents=split_chunks,
         embedding=embeddings,          
@@ -54,7 +53,7 @@ def query_database(user_query, k=2):
     """
     Searches the existing vector space for matching document chunks.
     """
-    embeddings = get_embedding_model(provider="local")
+    embeddings = get_embedding_model(provider="huggingface_api")
     
     # Load connection to the existing database folder
     db = Chroma(

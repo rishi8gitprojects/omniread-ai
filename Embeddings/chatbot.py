@@ -1,4 +1,3 @@
-# Embeddings/chatbot.py
 import os
 import json
 from openai import OpenAI
@@ -9,22 +8,19 @@ from langchain_chroma import Chroma
 # Bypassed HF Router: Moving directly to Groq's blazing fast, free-tier engine
 MODEL_IDENTIFIER = "llama-3.3-70b-versatile"
 
-# FORCE GLOBAL ABSOLUTE PATH CALCULATION
-# This guarantees your interface and chatbot look at the exact same database directory folder
-
 def _get_client(groq_api_key):
     return OpenAI(
         base_url="https://api.groq.com/openai/v1", 
         api_key=groq_api_key
     )
 
-
 def _retrieve_entire_book_context(user_query, groq_api_key):
     """
     Retrieves a stratified sample of the book (beginning, middle, and end) 
     to provide a holistic summary without violating Groq's 12,000 TPM free-tier limit.
     """
-    embeddings = get_embedding_model(provider="local")
+    # FIXED: Changed from "local" to "huggingface_api" to prevent server RAM crash
+    embeddings = get_embedding_model(provider="huggingface_api")
     
     db = Chroma(
         persist_directory=DB_DIR,
@@ -41,8 +37,6 @@ def _retrieve_entire_book_context(user_query, groq_api_key):
     total_chunks = len(all_chunks)
     
     # GROQ FREE TIER SAFETY LIMIT: ~12,000 Tokens Per Minute
-    # We sample exactly 12 evenly spaced chunks from the book.
-    # This gives the model the intro, plot points, and conclusion without crashing the API.
     MAX_SAFE_CHUNKS = 12
     
     if total_chunks <= MAX_SAFE_CHUNKS:
@@ -50,15 +44,11 @@ def _retrieve_entire_book_context(user_query, groq_api_key):
         print(f"✅ DATABASE CHECK: Feeding all {total_chunks} chunks directly to Llama 3.3...")
     else:
         print(f"⚖️ Document is {total_chunks} chunks. Taking {MAX_SAFE_CHUNKS} strategic samples to bypass Groq limits...")
-        # Calculate the mathematical step to grab evenly spaced sections of the book
         step_size = max(1, total_chunks // MAX_SAFE_CHUNKS)
         sampled_chunks = [all_chunks[i] for i in range(0, total_chunks, step_size)][:MAX_SAFE_CHUNKS]
     
-    # Pack the text strings together cleanly into a master text context layout
     full_text_context = "\n\n---\n\n".join(sampled_chunks)
-
     return full_text_context
-
 
 def handle_semantic_query(user_query, chat_history, hf_token):
     """
@@ -111,7 +101,7 @@ def handle_semantic_query(user_query, chat_history, hf_token):
         print(f"⚙️ Router warning (Fallback to Local): {str(e)}")
         intent = "LOCAL_EXAMINATION"
 
-    # 3. Pipeline Assignment & Context Assembly with Clean, Creative Prompts
+    # 3. Pipeline Assignment & Context Assembly
     if intent == "GLOBAL_SYNTHESIS":
         context_text = _retrieve_entire_book_context(user_query, hf_token)
         system_prompt = (
@@ -128,9 +118,7 @@ def handle_semantic_query(user_query, chat_history, hf_token):
         retrieved_chunks = query_database(user_query, k=4)
         context_text = "\n\n---\n\n".join([doc.page_content for doc in retrieved_chunks])
         
-        # SAFE INTERLOCK CRADLE FALLBACK:
-        # If your local lookup returned nothing (e.g. because of path or vector mismatching), 
-        # instantly scan the entire document context pool so the app never shows a blank error string.
+        # SAFE INTERLOCK CRADLE FALLBACK
         if not context_text.strip():
             print("⚠️ Local semantic search returned 0 chunks. Swapping to Full Context Scan pipeline...")
             context_text = _retrieve_entire_book_context(user_query, hf_token)
