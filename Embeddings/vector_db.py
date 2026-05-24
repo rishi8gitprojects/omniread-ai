@@ -1,11 +1,12 @@
 # Embeddings/vector_db.py
 import fitz  # PyMuPDF
+import os
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
 from Embeddings.embedding_engine import get_embedding_model
 
-DB_DIR = "./chroma_storage"
+DB_DIR =DB_DIR = os.path.join(os.path.dirname(__file__), "chroma_db")
 COLLECTION_NAME = "web_uploaded_docs"
 
 def process_pdf_bytes(pdf_bytes, file_name):
