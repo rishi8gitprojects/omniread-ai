@@ -2,6 +2,9 @@ import os
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
 # from langchain_openai import OpenAIEmbeddings # Uncomment if you switch to OpenAI later
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_embedding_model(provider="huggingface_api", model_name="sentence-transformers/all-MiniLM-L6-v2"):
     """
@@ -13,7 +16,7 @@ def get_embedding_model(provider="huggingface_api", model_name="sentence-transfo
         hf_token = os.getenv("HF_TOKEN")
         
         if not hf_token:
-            print("[Engine] WARNING: HF_TOKEN missing. Falling back to local execution (HIGH RAM DANGER!).")
+            print("[Engine] WARNING: HF_TOKEN missing(HIGH RAM DANGER!).")
             return HuggingFaceEmbeddings(model_name=model_name)
             
         print(f"[Engine] Routing embeddings to Hugging Face Cloud API: {model_name}")

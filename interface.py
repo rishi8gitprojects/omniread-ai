@@ -12,9 +12,9 @@ load_dotenv()
 HF_TOKEN = os.getenv("GROQ_API_KEY")
 
 # 1. Page Configuration Setup
-st.set_page_config(page_title="English Research Assistant", page_icon="?", layout="wide")
-st.title("📚 English Studies Textual & Rhetorical Analyst")
-st.subheader("Advanced RAG Workspace for Literary Analysts")
+st.set_page_config(page_title="omniread-ai", page_icon="?", layout="wide")
+st.title("⚯ ͛omniread-ai")
+st.subheader("Advanced RAG+Chatbot Workspace for Literary Analysts")
 
 # 2. Document Ingestion Section (The Missing Part)
 # We wrap this in an st.expander layout to keep the workspace clean
