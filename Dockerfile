@@ -19,4 +19,4 @@ COPY . .
 EXPOSE 8501
 
 # Add WebSocket protection and CORS bypass configurations
-CMD ["streamlit", "run", "interface.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.enableCORS=false", "--server.enableWebsocketCompression=false"]
+CMD ["streamlit", "run", "interface.py"]
