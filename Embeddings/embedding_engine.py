@@ -28,12 +28,6 @@ def get_embedding_model(provider="huggingface_api", model_name="sentence-transfo
     elif provider == "local":
         print(f"[Engine] Loading local HuggingFace model: {model_name} (Requires >400MB RAM)")
         return HuggingFaceEmbeddings(model_name=model_name)
-    
-    elif provider == "openai":
-        # Ensure os.environ["OPENAI_API_KEY"] is set before calling this
-        print(f"[Engine] Loading OpenAI model: {model_name}")
-        # return OpenAIEmbeddings(model=model_name)
-        raise NotImplementedError("OpenAI configuration is ready but currently commented out.")
-        
+            
     else:
         raise ValueError(f"Unknown embedding provider: {provider}")
