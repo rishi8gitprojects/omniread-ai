@@ -1,11 +1,11 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install lightweight compiler tools required by chromadb and sentence-transformers
+# Install lightweight compiler tools required by chromadb
 RUN apt-get update && apt-get install -y \
     g++ \
     python3-dev \
