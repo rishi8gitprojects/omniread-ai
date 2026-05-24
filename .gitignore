@@ -1,0 +1,29 @@
+# --- Python Environment & Caches ---
+rag_venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# --- Local Databases & Vector Storages ---
+chroma_storage/
+Embeddings/chroma_db/
+.chroma/
+
+# --- Local Secrets & Private Keys ---
+.env
+.env.*
+
+# --- Local Data & Document Corpora ---
+PDF/
+*.pdf
+*.docx
+*.txt
+!requirements.txt
+
+# --- IDE & System Files ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

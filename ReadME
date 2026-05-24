@@ -1,0 +1,37 @@
+Retrieval Augmented Generation for PDF Deep Analysis
+
+How this Project works.
+    User uploades Their PDF from which they want to do research and retrive information.
+        From there the PDF goes like.
+        
+        - The PDF is analysed and Texts are broken
+          broken into chunks. 
+
+        - Those Chunks then gets Embedded into     
+          vectors and stored into VectorDatabase.
+    
+
+    User then Queries their need of information.
+        The workflow afterwards.
+        - Those queries are embedded and then are searched into the 
+          vector database. The most related queries are brought-up and given to a prompt along with the query, that is fed to the Generative Artificial Intelligence(brain).
+
+        - The brain then generates and answer, specific to that query 
+          and that answer is forwarded to the user.
+
+## Embedding
+    In machine learning, an embedding is a way to represent discrete objects (like words, images, audio, or graph nodes) as dense numerical vectors in a continuous space. These vectors capture semantic relationships so that similar objects are positioned closer together in the embedding space. This transformation reduces high-dimensional data into a lower-dimensional form while preserving meaningful patterns, making it easier for models to process and generalize.
+
+    **Why they matter:**
+
+    **Dimensionality reduction:** Simplifies complex data while retaining essential features.
+
+    **Semantic understanding:** 
+    Captures relationships (e.g., “king” - “man” + “woman” ≈ “queen”).
+
+    **Efficiency:** Enables faster computation and better generalization in tasks like NLP, vision, and recommendations.
+
+## Language model:
+    
+
+
